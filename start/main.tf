@@ -13,9 +13,9 @@ terraform {
       name = "my-app-prod"
     }
   }
-  backend "local" {
-    path = "state/terraform.tfstate"
-  }
+  # backend "local" {
+  #   path = "state/terraform.tfstate"
+  # }
 }
 
 resource "local_file" "abc" {
