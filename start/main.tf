@@ -6,9 +6,16 @@ terraform {
       version = ">= 2.0.0"
     }
   }
+  cloud {
+    hostname = "app.terraform.io"
+    organization = "my-org"
+    workspaces {
+      name = "my-app-prod"
+    }
+  }
 }
 
 resource "local_file" "abc" {
-  content  = "123!"
+  content  = "123456!"
   filename = "${path.module}/abc.txt"
 }
