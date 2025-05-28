@@ -8,7 +8,7 @@ terraform {
   }
   cloud {
     hostname = "app.terraform.io"
-    organization = "my-org"
+    organization = "yooodleee-org"
     workspaces {
       name = "my-app-prod"
     }
