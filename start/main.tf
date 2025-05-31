@@ -29,6 +29,7 @@ resource "local_file" "abc" {
 # }
 
 resource "local_file" "def" {
+  depends_on = [ local_file.abc ]
   content = "456!"
   filename = "${path.module}/def.txt"
 }
