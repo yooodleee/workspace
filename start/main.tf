@@ -6,16 +6,17 @@ terraform {
       version = ">= 2.0.0"
     }
   }
-  cloud {
-    hostname = "app.terraform.io"
-    organization = "yooodleee-org"
-    workspaces {
-      name = "my-app-prod"
-    }
-  }
-  # backend "local" {
-  #   path = "state/terraform.tfstate"
+  # cloud {
+  #   hostname = "app.terraform.io"
+  #   organization = "yooodleee-org"
+  #   workspaces {
+  #     name = "my-app-prod"
+  #   }
   # }
+
+  backend "local" {
+    path = "state/terraform.tfstate"
+  }
 }
 
 resource "local_file" "abc" {
