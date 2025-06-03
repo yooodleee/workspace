@@ -1,5 +1,7 @@
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  host = var.k8s_host
+  token = var.k8s_token
+  cluster_ca_certificate = base64decode(var.k8s_ca_cert)
 }
 
 resource "kubernetes_namespace" "example" {
@@ -7,7 +9,7 @@ resource "kubernetes_namespace" "example" {
     name = "terraform-example-namespace"
 
     annotations = {
-      name = "example-annotation"
+      "example.com/created-by" = "terraform"
     }
   }
 }
