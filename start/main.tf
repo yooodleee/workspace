@@ -19,8 +19,12 @@ terraform {
 }
 
 resource "local_file" "abc" {
-  content  = "123!"
+  content  = "lifecycle - step 1"
   filename = "${path.module}/abc.txt"
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 # resource "aws_instance" "web" {
