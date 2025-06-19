@@ -20,7 +20,7 @@ terraform {
 }
 
 resource "local_file" "abc" {
-  content  = "lifecycle - step 5"
+  content  = "123!"
   filename = "${path.module}/abc.txt"
 
   lifecycle {
@@ -32,6 +32,10 @@ resource "local_file" "abc" {
   }
 }
 
+data "local_file" "abc" {
+  filename = local_file.abc.filename
+}
+
 # resource "aws_instance" "web" {
 #   ami = "ami-a1b2c3d4"
 #   instance_type = "t3.micro"
@@ -39,6 +43,6 @@ resource "local_file" "abc" {
 
 resource "local_file" "def" {
   depends_on = [ local_file.abc ]
-  content = "456!"
+  content = data.local_file.abc.content
   filename = "${path.module}/def.txt"
 }
