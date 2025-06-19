@@ -20,13 +20,15 @@ terraform {
 }
 
 resource "local_file" "abc" {
-  content  = "lifecycle - step 4"
+  content  = "lifecycle - step 5"
   filename = "${path.module}/abc.txt"
 
   lifecycle {
     # create_before_destroy = true
     # prevent_destroy = true
-    ignore_changes = [  ]
+    ignore_changes = [ 
+      content
+     ]
   }
 }
 
