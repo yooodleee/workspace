@@ -46,3 +46,25 @@ resource "local_file" "def" {
   content = data.local_file.abc.content
   filename = "${path.module}/def.txt"
 }
+
+resource "local_file" "maybe" {
+  count = var.file_create ? 1: 0
+  content = var.content
+  filename = "maybe.txt"
+}
+
+variable "file_create" {
+  type = bool
+  default = true
+}
+
+variable "content" {
+  description = "If a file is created, check whether its contents are empty."
+  default = "default content"
+  type = string
+
+  validation {
+    condition = var.file_create == true ? length(var.content) > 0 : true
+    error_message = "The file content cannot be empty."
+  }
+}
