@@ -20,7 +20,7 @@ terraform {
 }
 
 resource "local_file" "abc" {
-  content  = "123!"
+  content  = var.my_password
   filename = "${path.module}/abc.txt"
 
   lifecycle {
