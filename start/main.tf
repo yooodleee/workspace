@@ -31,8 +31,14 @@ variable "content" {
   }
 }
 
+variable "my_var" {
+  # default = "var2"
+  # description = "Content for abc.txt file"
+  # type = string
+}
+
 resource "local_file" "abc" {
-  content  = var.my_password
+  content  = var.my_var
   filename = "${path.module}/abc.txt"
 
   lifecycle {
@@ -42,8 +48,13 @@ resource "local_file" "abc" {
 
 resource "local_file" "def" {
   depends_on = [ local_file.abc ]
-  content = data.local_file.abc.content
+  content = local_file.abc.content
   filename = "${path.module}/def.txt"
+}
+
+resource "local_file" "ghi" {
+  content = var.my_var
+  filename = "${path.module}/ghi.txt"
 }
 
 resource "local_file" "maybe" {
