@@ -13,10 +13,22 @@ terraform {
       name = "my-app-prod"
     }
   }
+}
 
-  # backend "local" {
-  #   path = "state/terraform.tfstate"
-  # }
+variable "file_create" {
+  type = bool
+  default = true
+}
+
+variable "content" {
+  description = "If a file is created, check whether its contents are empty."
+  type = string
+  default = "default content"
+
+  validation {
+    condition = var.file_create == true ? length(var.content) > 0 : true
+    error_message = "The file content cannot be empty."
+  }
 }
 
 resource "local_file" "abc" {
@@ -24,22 +36,9 @@ resource "local_file" "abc" {
   filename = "${path.module}/abc.txt"
 
   lifecycle {
-    # create_before_destroy = true
-    # prevent_destroy = true
-    ignore_changes = [ 
-      content
-     ]
+    ignore_changes = [content]
   }
 }
-
-data "local_file" "abc" {
-  filename = local_file.abc.filename
-}
-
-# resource "aws_instance" "web" {
-#   ami = "ami-a1b2c3d4"
-#   instance_type = "t3.micro"
-# }
 
 resource "local_file" "def" {
   depends_on = [ local_file.abc ]
@@ -51,20 +50,4 @@ resource "local_file" "maybe" {
   count = var.file_create ? 1: 0
   content = var.content
   filename = "maybe.txt"
-}
-
-variable "file_create" {
-  type = bool
-  default = true
-}
-
-variable "content" {
-  description = "If a file is created, check whether its contents are empty."
-  default = "default content"
-  type = string
-
-  validation {
-    condition = var.file_create == true ? length(var.content) > 0 : true
-    error_message = "The file content cannot be empty."
-  }
 }
