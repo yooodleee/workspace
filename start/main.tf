@@ -41,7 +41,7 @@ variable "prefix" {
 
 variable "names" {
   type = list(string)
-  default = [ "a", "b", "c" ]
+  default = [ "a", "c" ]
 }
 
 locals {
