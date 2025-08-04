@@ -35,8 +35,16 @@ variable "my_var" {
   default = "var2"
 }
 
+variable "prefix" {
+  default = "hello"
+}
+
+locals {
+  name = "terraform"
+}
+
 resource "local_file" "abc" {
-  content  = var.my_var
+  content  = local.content
   filename = "${path.module}/abc.txt"
 
   lifecycle {
