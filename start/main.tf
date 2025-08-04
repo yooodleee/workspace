@@ -32,9 +32,7 @@ variable "content" {
 }
 
 variable "my_var" {
-  # default = "var2"
-  # description = "Content for abc.txt file"
-  # type = string
+  default = "var2"
 }
 
 resource "local_file" "abc" {
