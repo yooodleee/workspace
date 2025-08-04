@@ -39,13 +39,19 @@ variable "prefix" {
   default = "hello"
 }
 
+variable "names" {
+  type = list(string)
+  default = [ "a", "b", "c" ]
+}
+
 locals {
   name = "terraform"
 }
 
 resource "local_file" "abc" {
-  content  = "abc123"
-  filename = "${path.module}/abc.txt"
+  count = length(var.names)
+  content  = "abc"
+  filename = "${path.module}/abc-${var.names[count.index]}.txt"
 
   lifecycle {
     ignore_changes = [content]
@@ -53,9 +59,10 @@ resource "local_file" "abc" {
 }
 
 resource "local_file" "def" {
+  count = length(var.names)
   depends_on = [ local_file.abc ]
-  content = local_file.abc.content
-  filename = "${path.module}/def.txt"
+  content = local_file.abc[count.index].content
+  filename = "${path.module}/def-${element(var.names, count.index)}.txt"
 }
 
 resource "local_file" "ghi" {
@@ -67,12 +74,4 @@ resource "local_file" "maybe" {
   count = var.file_create ? 1: 0
   content = var.content
   filename = "maybe.txt"
-}
-
-output "file_id" {
-  value = local_file.abc.id
-}
-
-output "file_abspath" {
-  value = abspath(local_file.abc.filename)
 }
