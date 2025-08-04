@@ -44,7 +44,7 @@ locals {
 }
 
 resource "local_file" "abc" {
-  content  = local.content
+  content  = "abc123"
   filename = "${path.module}/abc.txt"
 
   lifecycle {
@@ -67,4 +67,12 @@ resource "local_file" "maybe" {
   count = var.file_create ? 1: 0
   content = var.content
   filename = "maybe.txt"
+}
+
+output "file_id" {
+  value = local_file.abc.id
+}
+
+output "file_abspath" {
+  value = abspath(local_file.abc.filename)
 }
