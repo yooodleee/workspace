@@ -40,8 +40,11 @@ variable "prefix" {
 }
 
 variable "names" {
-  type = list(string)
-  default = [ "a", "c" ]
+  default = {
+    a = "content a"
+    b = "content b"
+    c = "content c"
+  }
 }
 
 locals {
@@ -49,9 +52,9 @@ locals {
 }
 
 resource "local_file" "abc" {
-  count = length(var.names)
-  content  = "abc"
-  filename = "${path.module}/abc-${var.names[count.index]}.txt"
+  for_each = var.names
+  content = each.value
+  filename = "${path.module}/abc-${each.key}.txt"
 
   lifecycle {
     ignore_changes = [content]
@@ -59,10 +62,10 @@ resource "local_file" "abc" {
 }
 
 resource "local_file" "def" {
-  count = length(var.names)
+  for_each = local_file.abc
   depends_on = [ local_file.abc ]
-  content = local_file.abc[count.index].content
-  filename = "${path.module}/def-${element(var.names, count.index)}.txt"
+  content = each.value.content
+  filename = "${path.module}/def-${each.key}.txt"
 }
 
 resource "local_file" "ghi" {
