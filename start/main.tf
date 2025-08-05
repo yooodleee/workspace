@@ -40,10 +40,7 @@ variable "prefix" {
 }
 
 variable "names" {
-  default = {
-    a = "content a"
-    c = "content c"
-  }
+  default = ["a", "b", "c"]
 }
 
 locals {
@@ -51,9 +48,8 @@ locals {
 }
 
 resource "local_file" "abc" {
-  for_each = toset(["a", "b", "c"])
-  content = "abc"
-  filename = "${path.module}/abc-${each.key}.txt"
+  content = jsonencode(var.names)
+  filename = "${path.module}/abc.txt"
 
   lifecycle {
     ignore_changes = [content]
@@ -61,10 +57,9 @@ resource "local_file" "abc" {
 }
 
 resource "local_file" "def" {
-  for_each = local_file.abc
   depends_on = [ local_file.abc ]
-  content = each.value.content
-  filename = "${path.module}/def-${each.key}.txt"
+  content = jsonencode(var.names)
+  filename = "${path.module}/def.txt"
 }
 
 resource "local_file" "ghi" {
