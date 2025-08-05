@@ -44,6 +44,17 @@ variable "names" {
   default = ["a", "b"]
 }
 
+variable "members" {
+  type = map(object({
+    role = string
+  }))
+  default = {
+    ab = { role = "member", group = "dev" }
+    cd = { role = "admin", group = "dev" }
+    ef = { role = "member", group = "ops" }
+  }
+}
+
 locals {
   name = "terraform"
 }
@@ -78,12 +89,29 @@ output "A_upper_value" {
   value = [for v in var.names: upper(v)]
 }
 
+output "A_to_tuple" {
+  value = [for k, v in var.members: "${k} is ${v.role}"]
+}
+
 output "B_index_and_value" {
   value = [for i, v in var.names: "${i} is ${v}"]
 }
 
+output "B_get_only_role" {
+  value = {
+    for name, user in var.members: name => user.role
+    if user.role == "admin"
+  }
+}
+
 output "C_make_object" {
   value = {for v in var.names: v => upper(v)}
+}
+
+output "C_group" {
+  value = {
+    for name, user in var.members: user.role => name...
+  }
 }
 
 output "D_with_filter" {
