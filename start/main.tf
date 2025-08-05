@@ -42,7 +42,6 @@ variable "prefix" {
 variable "names" {
   default = {
     a = "content a"
-    b = "content b"
     c = "content c"
   }
 }
