@@ -51,8 +51,8 @@ locals {
 }
 
 resource "local_file" "abc" {
-  for_each = var.names
-  content = each.value
+  for_each = toset(["a", "b", "c"])
+  content = "abc"
   filename = "${path.module}/abc-${each.key}.txt"
 
   lifecycle {
