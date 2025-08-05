@@ -48,7 +48,7 @@ locals {
 }
 
 resource "local_file" "abc" {
-  content = jsonencode(var.names)
+  content = jsonencode([for s in var.names: upper(s)]) # ["A", "B", "C"]
   filename = "${path.module}/abc.txt"
 
   lifecycle {
@@ -58,7 +58,7 @@ resource "local_file" "abc" {
 
 resource "local_file" "def" {
   depends_on = [ local_file.abc ]
-  content = jsonencode(var.names)
+  content = jsonencode([for s in var.names: upper(s)]) # ["A", "B", "C"]
   filename = "${path.module}/def.txt"
 }
 
